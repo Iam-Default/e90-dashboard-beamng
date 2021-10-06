@@ -19,7 +19,7 @@ class OutgaugeServer(Thread):
             print(f"Port 4444 is not open ( {result} )")
 
         self.sock.bind((UDP_IP, UDP_PORT))
-        print(f"Server listening ({UDP_IP}:{UDP_PORT}")
+        print(f"Server listening ({UDP_IP}:{UDP_PORT})")
         self.time = 0
         self.car = ""
         self.words = ""
