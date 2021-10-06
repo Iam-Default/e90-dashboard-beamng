@@ -23,18 +23,21 @@ PacketSerial serial;
 /*
   Main
 */
-void setup() {
+void setup()
+{
   //Initialize serial port
   serial.begin(SERIAL_BAUD_RATE);
   serial.setPacketHandler(&serialReceive);
 
   //Initialize CAN-BUS
-  while(CAN.begin(CAN_BAUD_RATE) != CAN_OK){
+  while (CAN.begin(CAN_BAUD_RATE) != CAN_OK)
+  {
     delay(100);
   }
 }
 
-void loop() {
+void loop()
+{
   canSend();
   serial.update();
 }

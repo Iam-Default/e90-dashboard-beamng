@@ -14,6 +14,8 @@ uint16_t s_speed = 0;
 uint16_t s_rpm = 0;
 uint16_t s_fuel = 0; // 1000 - max;
 uint8_t s_engine_temp = 91;
+uint8_t s_engine_oil_temp = 105;
+uint8_t s_outside_temp = 10;
 
 uint8_t s_time_hour = 0;
 uint8_t s_time_minute = 0;

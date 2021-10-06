@@ -14,6 +14,8 @@ extern uint16_t s_rpm;
 extern uint16_t s_speed;
 extern uint16_t s_fuel;
 extern uint8_t s_engine_temp;
+extern uint8_t s_engine_oil_temp;
+extern uint8_t s_outside_temp;
 
 extern uint8_t s_time_hour;
 extern uint8_t s_time_minute;

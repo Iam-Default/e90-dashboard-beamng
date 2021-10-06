@@ -13,7 +13,6 @@
 //Constant
 extern const uint8_t DTIME_MULTIPLE;
 
-
 /*
   Functions
 */
@@ -29,6 +28,7 @@ void canSendRPM();
 void canSendSpeed();
 void canSendTime();
 void canSendEngineTemp();
+void canSendOutsideTemp();
 
 void canSendAbsCounter();
 void canSendAirbagCounter();
