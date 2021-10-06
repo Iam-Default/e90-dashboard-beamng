@@ -6,18 +6,6 @@ from time import sleep
 from serial.tools.list_ports import comports
 
 
-def check_ip(ip):
-    numbers = ip.split(".")
-
-    if len(numbers) > 4 or len(numbers) < 4:
-        return False
-
-    for number in numbers:
-        if int(number) < 0 or int(number) > 255:
-            return False
-    return True
-
-
 def clearConsole():
     command = 'clear'
     if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
@@ -34,30 +22,14 @@ def list_ports():
 if __name__ == "__main__":
     rc = Console()
     dashboard = Dashboard()
-
-    clearConsole()
-
-    while True:
-        command = rc.input("Enter ip: ")
-        clearConsole()
-        if command.lower() == "exit":
-            break
-
-        if check_ip(command):
-            beamng = OutgaugeServer(UDP_IP=command)
-            beamng.start()
-            break
-        else:
-            rc.print("[red]Incorrect ip address[/red]")
-
-    sleep(5)
+    beamng = OutgaugeServer(UDP_IP="127.0.0.1")
+    beamng.start()
 
     while True:
         clearConsole()
         list_ports()
         command = rc.input("Enter arduino port: ")
         if dashboard.open(port=command):
-            dashboard.ignition = True
             rc.print("[green]Serial port is open[/green]")
             break
         else:
@@ -66,9 +38,19 @@ if __name__ == "__main__":
 
     while True:
         try:
-            dashboard.speed = beamng.speed
+            if dashboard.RPM > 0:
+                dashboard.ignition = True
+                dashboard.parking_lights = True
+            else:
+                dashboard.ignition = False
+                dashboard.parking_lights = False
+
+            dashboard.speed = beamng.speed * 3.6
             dashboard.RPM = beamng.RPM
-            dashboard.fuel = beamng.fuel
+            dashboard.fuel = beamng.fuel * 1000
+            dashboard.coolant_temp = beamng.engtemp
+            dashboard.oil_temp = beamng.oiltemp
+
             dashboard.update()
         except:
             break

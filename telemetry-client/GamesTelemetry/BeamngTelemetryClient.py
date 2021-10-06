@@ -31,6 +31,7 @@ class OutgaugeServer(Thread):
         self.engtemp = 0.0
         self.fuel = 0.0
         self.oilpress = 0.0
+        self.oiltemp = 0.0
         # self.spare1=0.0
         # self.spare2=0.0
         # self.spare3=0.0
@@ -56,6 +57,7 @@ class OutgaugeServer(Thread):
             self.engtemp = struct.unpack("f", data[24:28])[0]
             self.fuel = struct.unpack("f", data[28:32])[0]
             self.oilpress = struct.unpack("f", data[32:36])[0]
+            self.oiltemp = struct.unpack("f", data[36:40])[0]
             self.dashlights = struct.unpack("I", data[44:48])[0]
             self.showlights = struct.unpack("I", data[40:44])[0]
             # self.spare3=struct.unpack("f",data[44:48])[0]
