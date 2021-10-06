@@ -3,6 +3,7 @@ from cobs import cobs
 import time
 import threading
 
+
 class Dashboard:
     BLINKERS_OFF = 0
     BLINKERS_LEFT = 1
@@ -26,12 +27,15 @@ class Dashboard:
         self.day = 1
         self.month = 1
         self.year = 2019
+        self.oil_temp = 0
+        self.coolant_temp = 0
 
         self.__serial = Serial()
         self.__lock = threading.Lock()
 
-    def open(self, port = None, baudrate = 115200):
-        self.__serial = Serial(port=port, baudrate=baudrate, timeout=1.0, write_timeout=2.0)
+    def open(self, port=None, baudrate=115200):
+        self.__serial = Serial(port=port, baudrate=baudrate,
+                               timeout=1.0, write_timeout=2.0)
         time.sleep(1)
         self.__serial.flushInput()
         return self.__serial.isOpen()
@@ -61,9 +65,8 @@ class Dashboard:
         packet += int(self.day).to_bytes(1, 'little')
         packet += int(self.month).to_bytes(1, 'little')
         packet += int(self.year).to_bytes(2, 'little')
+        packet += int(self.oil_temp).to_bytes(1, 'little')
+        packet += int(self.coolant_temp).to_bytes(1, 'little')
         self.__lock.release()
         packet_encoded = cobs.encode(packet) + b'\x00'
         self.__serial.write(packet_encoded)
-        
-
-    

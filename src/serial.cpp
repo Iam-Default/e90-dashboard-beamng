@@ -28,7 +28,8 @@
 */
 
 #pragma pack(push, 1)
-struct SerialPacket{
+struct SerialPacket
+{
   uint8_t ignition;
   uint8_t parking_lights;
   uint8_t dipped_lights;
@@ -48,16 +49,20 @@ struct SerialPacket{
   uint8_t day;
   uint8_t month;
   uint16_t year;
+
+  uint8_t oil_temp;
+  uint8_t coolan_temp;
 };
 #pragma pack(pop)
 
-
-void serialReceive(const uint8_t* buffer, size_t size){
-  if(sizeof(SerialPacket) != size){
+void serialReceive(const uint8_t *buffer, size_t size)
+{
+  if (sizeof(SerialPacket) != size)
+  {
     return;
   }
 
-  SerialPacket* serialPacket = (SerialPacket*)buffer;
+  SerialPacket *serialPacket = (SerialPacket *)buffer;
 
   s_ignition = serialPacket->ignition;
   s_light_parking = serialPacket->parking_lights;
@@ -78,4 +83,7 @@ void serialReceive(const uint8_t* buffer, size_t size){
   s_time_day = serialPacket->day;
   s_time_month = serialPacket->month;
   s_time_year = serialPacket->year;
+
+  s_engine_oil_temp = serialPacket->oil_temp;
+  s_engine_temp = serialPacket->coolan_temp;
 }
