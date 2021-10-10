@@ -18,6 +18,11 @@ class Dashboard:
         self.fog_lights = False
         self.blinkers = Dashboard.BLINKERS_OFF
         self.handbrake = False
+        self.shift_light = False
+        self.abs_enabled = False
+        self.tc_enabled = False  # traction controll
+        self.oil_pressure_warning = False
+        self.battery_warning = False
         self.RPM = 0
         self.speed = 0
         self.fuel = 0
@@ -28,7 +33,13 @@ class Dashboard:
         self.month = 1
         self.year = 2019
         self.oil_temp = 0
+        self.oil_pressure = 0
         self.coolant_temp = 0
+        self.boost_pressure = 0
+        self.gear = 1  # 0 - reverse, 1 - neurtal, 2 -first
+        self.throttle_pedal = 0
+        self.brake_pedal = 0
+        self.clutch_pedal = 0
 
         self.__serial = Serial()
         self.__lock = threading.Lock()
