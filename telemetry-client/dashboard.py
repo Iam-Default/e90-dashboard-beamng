@@ -19,8 +19,8 @@ class Dashboard:
         self.blinkers = Dashboard.BLINKERS_OFF
         self.handbrake = False
         self.shift_light = False
-        self.abs_enabled = False
-        self.tc_enabled = False  # traction controll
+        self.abs_active = False  # abs active or disabled
+        self.tc_active = False  # traction controll active or disabled
         self.oil_pressure_warning = False
         self.battery_warning = False
         self.RPM = 0

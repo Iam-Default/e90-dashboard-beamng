@@ -30,6 +30,8 @@ class BeamngCli():
             clearConsole()
             self.list_ports()
             command = self.rc.input("Enter arduino port: ")
+            if command.lower() == "none":
+                break
             if self.dashboard.open(port=command):
                 self.rc.print(f"Serial port [green]{command}[/green] is open")
                 break
@@ -47,18 +49,45 @@ class BeamngCli():
                 self.dashboard.fuel = self.beamng.fuel * 1000
                 self.dashboard.coolant_temp = self. beamng.engtemp
                 self.dashboard.oil_temp = self.beamng.oiltemp
+                self.dash_lights()
                 self.console_output()
                 self.refresh_rate()
         except KeyboardInterrupt:
             self.rc.print(self.exit_message)
 
     def check_ignition_on(self):
-        if self.dashboard.RPM > 0:
-            self.dashboard.ignition = True
-            self.dashboard.parking_lights = True
+        self.dashboard.ignition = self.dashboard.parking_lights = not self.dashboard.battery_warning
+
+    def dash_lights(self):
+        shift_light = 1
+        high_beam = 2
+        handbrake = 4
+        pit_speed_limit = 8
+        tc_active = 16
+        left_turn_signal = 32
+        right_turn_signal = 64
+        hazard_light = 128
+        oil_pressure_warning = 256
+        battery_warning = 512
+        abs_active = 1024
+
+        dl = self.beamng.dashlights
+
+        self.dashboard.shift_light = bool(dl & shift_light)
+        self.dashboard.handbrake = bool(dl & handbrake)
+        self.dashboard.tc_enabled = bool(dl & tc_active)
+        self.dashboard.oil_pressure_warning = bool(dl & oil_pressure_warning)
+        self.dashboard.battery_warning = bool(dl & battery_warning)
+        self.dashboard.abs_enabled = bool(dl & abs_active)
+
+        if dl & left_turn_signal:
+            self.dashboard.blinkers = self.dashboard.BLINKERS_LEFT
+        elif dl & right_turn_signal:
+            self.dashboard.blinkers = self.dashboard.BLINKERS_RIGHT
+        elif dl & hazard_light:
+            self.dashboard.blinkers = self.dashboard.BLINKERS_HAZZARD
         else:
-            self.dashboard.ignition = False
-            self.dashboard.parking_lights = False
+            self.dashboard.blinkers = self.dashboard.BLINKERS_OFF
 
     def refresh_rate(self, hz=60):
         second = 1
@@ -87,7 +116,9 @@ class BeamngCli():
         if self.console_output_enabled and self.console_update_required():
             clearConsole()
             self.rc.print(
-                f"{self.dashboard.speed} Km/h, {self.dashboard.RPM} RPM/min")
+                f"{self.dashboard.speed} Km/h, {self.dashboard.RPM} RPM/min, Boost {self.dashboard.boost_pressure} Bar, Oil press {self.dashboard.oil_pressure} Bar, Oil temp {self.dashboard.oil_temp} C, Coolant temp {self.dashboard.coolant_temp} C")
+            self.rc.print(
+                f"Ignition {self.dashboard.ignition}, Shift light {self.dashboard.shift_light}, Handbrake {self.dashboard.handbrake},  Blinkers {self.dashboard.blinkers}")
 
 
 if __name__ == "__main__":
