@@ -6,20 +6,16 @@ from threading import Thread
 class OutgaugeServer(Thread):
     """Outgauge UDP Server thread class"""
 
-    def __init__(self, UDP_IP="", UDP_PORT=4444):
+    def __init__(self, UDP_IP="127.0.0.1", UDP_PORT=4444):
         Thread.__init__(self)
         self.work = True
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        result = sock.connect_ex(('localhost', 4444))
-        if result == 0:
-            print("Port is open")
-        else:
-            print(f"Port 4444 is not open ( {result} )")
-
-        self.sock.bind((UDP_IP, UDP_PORT))
-        print(f"Server listening ({UDP_IP}:{UDP_PORT})")
+        try:
+            sock.connect_ex(('localhost', 4444))
+            self.sock.bind((UDP_IP, UDP_PORT))
+        except:
+            print(f"Can't start server {UDP_IP}:{UDP_PORT}")
         self.time = 0
         self.car = ""
         self.words = ""

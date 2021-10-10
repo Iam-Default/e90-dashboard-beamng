@@ -2,18 +2,16 @@ from dashboard import Dashboard
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-import math
 import sys
-import glob
 import serial
 import serial.tools.list_ports
 import qdarkstyle
 import Games.ets2
 
-
 #
 # Widgets
 #
+
 
 class SerialGroupBox(QGroupBox):
     def __init__(self, parent=None):
@@ -28,16 +26,16 @@ class SerialGroupBox(QGroupBox):
 
         self.portLabel = QLabel(self)
         self.portLabel.setText("Port:")
-        self.layout.addWidget(self.portLabel, 1) 
+        self.layout.addWidget(self.portLabel, 1)
 
         self.portComboBox = QComboBox(self)
         self.portComboBox.currentIndexChanged.connect(self.onPortChange)
-        self.layout.addWidget(self.portComboBox, 3) 
+        self.layout.addWidget(self.portComboBox, 3)
 
         self.connectButton = QPushButton(self)
         self.connectButton.setText("Connect")
-        self.layout.addWidget(self.connectButton, 1) 
-        
+        self.layout.addWidget(self.connectButton, 1)
+
         self.setLayout(self.layout)
 
         self.portRefresh()
@@ -62,10 +60,12 @@ class SerialGroupBox(QGroupBox):
         self.portComboBox.setDisabled(False)
         self.isLock = False
 
+
 class GameGroupBox(QGroupBox):
     games = [
         ("Euro Truck Symulator 2 (ets2-telemetry-udp)", Games.ets2.GameWidget),
-        ("American Truck Simulator (ets2-telemetry-udp)", Games.ets2.GameWidget)
+        ("American Truck Simulator (ets2-telemetry-udp)", Games.ets2.GameWidget),
+        ("BeamNg Drive", Games.beamng.GameWidget)
     ]
 
     def __init__(self, parent=None):
@@ -98,13 +98,14 @@ class GameGroupBox(QGroupBox):
         self.gameComboBox.clear()
         for game in self.games:
             self.gameComboBox.addItem(game[0])
-            self.gameWidgetStack.addWidget(game[1](self.parent().dashboard, self))
-        
+            self.gameWidgetStack.addWidget(
+                game[1](self.parent().dashboard, self))
+
     def onGameChange(self, index):
         oldWidget = self.gameWidgetStack.currentWidget()
         if oldWidget is not None:
             oldWidget.close()
-        
+
         self.gameWidgetStack.setCurrentIndex(index)
         pass
 
@@ -112,9 +113,11 @@ class GameGroupBox(QGroupBox):
 # E90Dashboard window
 #
 
+
 class E90Dashboard(QMainWindow):
     WINDOW_WIDTH = 400
     WINDOW_HEIGHT = 300
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.dashboard = Dashboard()
@@ -123,7 +126,7 @@ class E90Dashboard(QMainWindow):
         self.dashboardUpdateTimer = QTimer(self)
         self.dashboardUpdateTimer.setInterval(5)
         self.dashboardUpdateTimer.timeout.connect(self.updateDashboard)
-        
+
     def createUi(self):
         #
         # Main window
@@ -145,7 +148,8 @@ class E90Dashboard(QMainWindow):
         # Dashboard
         #
         self.serialGroupBox = SerialGroupBox(self)
-        self.serialGroupBox.connectButton.pressed.connect(self.onConnectButtonPress)
+        self.serialGroupBox.connectButton.pressed.connect(
+            self.onConnectButtonPress)
         self.mainlayout.addWidget(self.serialGroupBox)
 
         #
@@ -190,10 +194,10 @@ class E90Dashboard(QMainWindow):
 # Main
 #
 
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     e90Dashboard = E90Dashboard()
     e90Dashboard.show()
     sys.exit(app.exec_())
-
