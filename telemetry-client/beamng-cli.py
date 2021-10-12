@@ -80,10 +80,10 @@ class BeamngCli():
 
         self.dashboard.shift_light = bool(dl & shift_light)
         self.dashboard.handbrake = bool(dl & handbrake)
-        self.dashboard.tc_enabled = bool(dl & tc_active)
+        self.dashboard.tc_active = bool(dl & tc_active)
         self.dashboard.oil_pressure_warning = bool(dl & oil_pressure_warning)
         self.dashboard.battery_warning = bool(dl & battery_warning)
-        self.dashboard.abs_enabled = bool(dl & abs_active)
+        self.dashboard.abs_active = bool(dl & abs_active)
 
         if dl & hazard_light:
             self.dashboard.blinkers = self.dashboard.BLINKERS_HAZZARD
