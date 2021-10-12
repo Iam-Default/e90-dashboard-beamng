@@ -51,6 +51,9 @@ class BeamngCli():
                 self.dashboard.fuel = self.beamng.fuel * 1000
                 self.dashboard.coolant_temp = self. beamng.engtemp
                 self.dashboard.oil_temp = self.beamng.oiltemp
+                self.dashboard.oil_pressure = self.beamng.oilpress
+                self.dashboard.boost_pressure = self.beamng.turbo
+                self.dashboard.gear = self.beamng.gear
                 self.dash_lights()
                 self.console_output()
                 self.refresh_rate()
