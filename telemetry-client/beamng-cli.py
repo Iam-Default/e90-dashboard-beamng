@@ -121,9 +121,11 @@ class BeamngCli():
         if self.console_output_enabled and self.console_update_required():
             clearConsole()
             self.rc.print(
-                f"{self.dashboard.speed} Km/h, {self.dashboard.RPM} RPM/min, Boost {self.dashboard.boost_pressure} Bar, Oil press {self.dashboard.oil_pressure} Bar, Oil temp {self.dashboard.oil_temp} C, Coolant temp {self.dashboard.coolant_temp} C")
+                f"{self.dashboard.speed:.2f} Km/h, {self.dashboard.RPM:.2f} RPM/min, Boost {self.dashboard.boost_pressure:.2f} Bar, Oil press {self.dashboard.oil_pressure:.2f} Bar, Oil temp {self.dashboard.oil_temp:.2f} C, Coolant temp {self.dashboard.coolant_temp:.2f} C")
             self.rc.print(
                 f"Ignition {self.dashboard.ignition}, Shift light {self.dashboard.shift_light}, Handbrake {self.dashboard.handbrake},  Blinkers {self.dashboard.blinkers}")
+            self.rc.print(
+                f"ABS {self.dashboard.abs_active}, TC {self.dashboard.tc_active}, Gear {self.dashboard.gear}")
 
 
 if __name__ == "__main__":
