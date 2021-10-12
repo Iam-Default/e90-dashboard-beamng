@@ -15,6 +15,7 @@ def clearConsole():
 
 class BeamngCli():
     def __init__(self):
+        clearConsole()
         self.previous_time = time()
         self.console_update_interval = 0.5
         self.exit_message = "Exit succesfull"
@@ -32,13 +33,14 @@ class BeamngCli():
             command = self.rc.input("Enter arduino port: ")
             if command.lower() == "none":
                 break
-            if self.dashboard.open(port=command):
+            try:
+                self.dashboard.open(port=command)
                 self.rc.print(f"Serial port [green]{command}[/green] is open")
                 break
-            else:
+            except:
                 self.rc.print(
                     f"Can't open serial port [red]{command}[/red] !!")
-                sleep(5)
+                sleep(2)
 
     def update_dashboard(self):
         try:
@@ -80,12 +82,12 @@ class BeamngCli():
         self.dashboard.battery_warning = bool(dl & battery_warning)
         self.dashboard.abs_enabled = bool(dl & abs_active)
 
-        if dl & left_turn_signal:
+        if dl & hazard_light:
+            self.dashboard.blinkers = self.dashboard.BLINKERS_HAZZARD
+        elif dl & left_turn_signal:
             self.dashboard.blinkers = self.dashboard.BLINKERS_LEFT
         elif dl & right_turn_signal:
             self.dashboard.blinkers = self.dashboard.BLINKERS_RIGHT
-        elif dl & hazard_light:
-            self.dashboard.blinkers = self.dashboard.BLINKERS_HAZZARD
         else:
             self.dashboard.blinkers = self.dashboard.BLINKERS_OFF
 
